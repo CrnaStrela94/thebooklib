@@ -1,32 +1,39 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
+import { RootState } from './store';
 
-interface FavoriteAuthorState {
-    favoriteAuthors: string[];
+export interface Author {
+    id: string;
+    name: string;
 }
 
-const initialState: FavoriteAuthorState = {
-    favoriteAuthors: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('favoriteAuthors') || '[]') : [],
+interface FavoriteAuthorsState {
+    favoriteAuthors: Author[];
+}
+
+const initialState: FavoriteAuthorsState = {
+    favoriteAuthors: typeof window !== 'undefined' && localStorage.getItem('favoriteAuthors') ? JSON.parse(localStorage.getItem('favoriteAuthors') ?? '[]') : [],
 };
 
-const favoriteAuthorSlice = createSlice({
-    name: 'favoriteAuthor',
+const favoriteAuthorsSlice = createSlice({
+    name: 'favoriteAuthors',
     initialState,
     reducers: {
-        addFavoriteAuthor: (state, action: PayloadAction<string>) => {
+        addFavoriteAuthor: (state, action: PayloadAction<Author>) => {
             state.favoriteAuthors.push(action.payload);
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('favoriteAuthors', JSON.stringify(state.favoriteAuthors));
-            }
+            localStorage.setItem('favoriteAuthors', JSON.stringify(state.favoriteAuthors));
         },
         removeFavoriteAuthor: (state, action: PayloadAction<string>) => {
-            state.favoriteAuthors = state.favoriteAuthors.filter(author => author !== action.payload);
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('favoriteAuthors', JSON.stringify(state.favoriteAuthors));
-            }
+            state.favoriteAuthors = state.favoriteAuthors.filter(author => author.id !== action.payload);
+            localStorage.setItem('favoriteAuthors', JSON.stringify(state.favoriteAuthors));
         },
     },
 });
 
-export const { addFavoriteAuthor, removeFavoriteAuthor } = favoriteAuthorSlice.actions;
+export const { addFavoriteAuthor, removeFavoriteAuthor } = favoriteAuthorsSlice.actions;
 
-export default favoriteAuthorSlice.reducer;
+export const selectFavoriteAuthors = createSelector(
+    (state: RootState) => state.favoriteAuthor.favoriteAuthors,
+    favoriteAuthors => favoriteAuthors
+);
+
+export default favoriteAuthorsSlice.reducer;
