@@ -2,11 +2,12 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@reduxjs/toolkit/query';
 import { addFavoriteBook, removeFavoriteBook, selectFavoriteBooks } from '../store/favoriteBookSlice';
-import { addFavoriteAuthor, removeFavoriteAuthor } from '../store/favoriteBookSlice';
 import { Book } from '../store/favoriteBookSlice';
+import { addFavoriteAuthor, removeFavoriteAuthor } from '../store/favoriteAuthorSlice';
+
 
 interface BookListProps {
-    books?: any[]; // Replace 'any' with the actual type of your books
+    books?: any[];
 }
 
 export const BookList: React.FC<BookListProps> = ({ books }) => {
@@ -29,6 +30,21 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
             handleRemoveFavorite(book);
         }
     }
+    const handleAddFavoriteAuthor = (author: string) => {
+        dispatch(addFavoriteAuthor(author));
+    };
+
+    const handleRemoveFavoriteAuthor = (author: string) => {
+        dispatch(removeFavoriteAuthor(author));
+    };
+
+    function handleFavoriteAuthorChange(author: string, checked: boolean): void {
+        if (checked) {
+            handleAddFavoriteAuthor(author);
+        } else {
+            handleRemoveFavoriteAuthor(author);
+        }
+    }
 
 
     return (
@@ -41,6 +57,9 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
                             <h2 className="text-xl font-bold mb-2 truncate" style={{ maxWidth: '90%' }}>{book.title}</h2>
                             <h3 className="text-lg mb-4">{book.author_name}</h3>
                             <input type="checkbox" onChange={(e) => handleFavoriteChange(book, e.target.checked)} /> Favorite
+                            <h3 className="text-lg mb-4">{book.author_name}</h3>
+                            <input type="checkbox" onChange={(e) => handleFavoriteAuthorChange(book.author_name, e.target.checked)} /> Favorite Author
+
                             {typeof book === 'object' && book.key && favoriteBooks.some((favoriteBook: any) => favoriteBook.key === book.key) && <button onClick={() => handleRemoveFavorite(book)}>Remove from favorites</button>}
                             <p className="text-gray-500">{book.first_publish_year}</p>
                         </div>

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
-import { RootState } from './store'; // Import the RootState from your store file
+import { RootState } from './store';
 
 export interface Book {
     key: string;

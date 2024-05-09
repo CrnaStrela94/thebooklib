@@ -32,16 +32,13 @@ const LibrarySearch = () => {
         setNumBooksToLoad(numBooksToLoad + 10);
     };
 
-    const toggleShowFavorites = () => {
-        setShowFavorites(!showFavorites);
-    };
+
 
     return (
         <div>
             <SearchForm />
             {showFavorites ? <BookList books={favoriteBooks} /> : <BookList />}
             <button onClick={loadMoreBooks}>Load More</button>
-            <button onClick={toggleShowFavorites}>{showFavorites ? 'Show All' : 'My Favorites'}</button>
         </div>
     );
 };
