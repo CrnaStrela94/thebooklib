@@ -22,7 +22,6 @@ const FavoriteAuthors = () => {
     const handleAuthorClick = async (author: Author) => {
         setSelectedAuthor(author);
 
-        // Fetch the books of the author
         const response = await fetch(`https://openlibrary.org/search.json?author=${encodeURIComponent(author.name)}`);
         const data = await response.json();
         setBooks(data.docs);

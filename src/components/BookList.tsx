@@ -48,11 +48,11 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
         setSelectedBook(null);
     }
 
-    const handleRemoveFavoriteAuthor = (author: Author) => { // Treat author as an object of type Author
+    const handleRemoveFavoriteAuthor = (author: Author) => {
         dispatch(removeFavoriteAuthor(author.id));
     };
 
-    function handleFavoriteAuthorChange(author: Author, checked: boolean): void { // Treat author as an object of type Author
+    function handleFavoriteAuthorChange(author: Author, checked: boolean): void {
         if (checked && !favoriteAuthors.some(favAuthor => favAuthor.id === author.id)) {
             dispatch(addFavoriteAuthor(author));
         } else if (!checked) {
