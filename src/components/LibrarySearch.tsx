@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setData, selectSearchParams } from '../store/bookSearchSlice';
-import { selectFavoriteBooks } from '../store/favoriteBookSlice';
 import { SearchForm } from './SearchForm';
 import { BookList } from './BookList';
 
 const LibrarySearch = () => {
     const dispatch = useDispatch();
     const searchParams = useSelector(selectSearchParams);
-    const favoriteBooks = useSelector(selectFavoriteBooks);
     const [numBooksToLoad, setNumBooksToLoad] = useState(10);
     const [showFavorites, setShowFavorites] = useState(false);
 
@@ -37,7 +35,7 @@ const LibrarySearch = () => {
     return (
         <div>
             <SearchForm />
-            {showFavorites ? <BookList books={favoriteBooks} /> : <BookList />}
+            <BookList />
             <button onClick={loadMoreBooks}>Load More</button>
         </div>
     );

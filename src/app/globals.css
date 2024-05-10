@@ -14,7 +14,7 @@ a {
 @media (prefers-color-scheme: dark) {
   body {
     color: black;
-    background: black;
+    background: rgb(87, 87, 87);
   }
 
   a {

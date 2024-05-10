@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction, createSelector } from '@reduxjs/toolkit';
 import { RootState } from './store';
+import { ReactNode } from 'react';
 
 export interface Book {
+    author_name: any;
+    first_publish_year: ReactNode;
     key: string;
     id: string;
     title: string;
