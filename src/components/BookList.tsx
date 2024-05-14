@@ -7,6 +7,7 @@ import { Author, addFavoriteAuthor, removeFavoriteAuthor, selectFavoriteAuthors 
 import { Rating, ThinStar } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
 import Buttons from './btn';
+import { AuthorInfoModal } from './AuthorInfoModal';
 
 
 interface BookListProps {
@@ -22,6 +23,8 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
     const [selectedBook, setSelectedBook] = useState<Book | null>(null);
     const [pagesRead, setPagesRead] = useState(0);
     const [ratings, setRatings] = useState<Record<string, number>>({});
+    const [showAuthorInfoModal, setShowAuthorInfoModal] = useState(false);
+    const [authorInfo, setAuthorInfo] = useState<any>(null);
 
     useEffect(() => {
         const newRatings: Record<string, number> = {};
@@ -62,7 +65,10 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
             localStorage.setItem('ratings', JSON.stringify(newRatings));
             return newRatings;
         });
+
+
     };
+
 
     function handleCloseModal(): void {
         if (selectedBook) {
@@ -94,6 +100,13 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
         inactiveFillColor: '#fbf1a9',
         size: '15px'
     }
+    const handleAuthorClick = async (author: Author) => {
+        const response = await fetch(`https://openlibrary.org/search/authors.json?q=${encodeURIComponent(author.name)}`);
+        const data = await response.json();
+        setAuthorInfo(data.docs[0]);
+        setShowAuthorInfoModal(true);
+    };
+
 
 
 
@@ -103,11 +116,11 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
                 <div className="grid grid-cols-4 gap-4 pt-4">
 
                     {data.map((book: any) => (
-                        <div key={book.key} className="flex flex-col items-center justify-between bg-white shadow-lg rounded-lg p-3" style={{ width: '25rem', height: '30rem' }}>
+                        <div key={book.key} className="flex flex-col items-center justify-between bg-white shadow-lg rounded-lg p-3 md:p-5 lg:p-8" style={{ width: '100%', maxWidth: '25rem', height: 'auto' }}>
                             <div className="flex flex-col items-center justify-center">
                                 <img className="w-32 h-48 object-cover mb-4" src={book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : '/book-cover-svgrepo-com.svg'} alt={book.title} />
                                 <h2 className="text-xl font-bold mb-2 truncate" style={{ maxWidth: '90%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal', wordWrap: 'break-word', height: '3rem' }} >{book.title}</h2>
-                                <h3 className="text-lg mb-4" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal', wordWrap: 'break-word' }}>{book.author_name[0]}</h3>
+                                <h3 className="text-lg mb-4" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'normal', wordWrap: 'break-word' }} onClick={() => handleAuthorClick({ id: book.author_name[0], name: book.author_name[0] })}>{book.author_name[0]}</h3>
                                 <p className="text-gray-500">{book.first_publish_year}</p>
                                 <Rating style={{ maxWidth: 150 }} value={ratings[book.key] || 0} onChange={(newRating: number) => handleRatingChange(book, newRating)} itemStyles={myStyles} />
                                 <button className="text-xs px-1 py-0.5 bg-blue-500 text-white rounded hover:bg-blue-700" onClick={() => handleOpenModal(book)}>More Info</button>
@@ -135,17 +148,28 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
                 selectedBook && (
                     <div className="fixed inset-0 flex items-center justify-center z-10">
                         <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                        <div className="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:max-w-md sm:w-full">
-                            <h3 className="ml-4 mt-4 text-lg leading-6 font-medium text-gray-900 overflow-auto">{selectedBook.title}</h3>
+                        <div className="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all xs:w-full sm:w-3/4 md:w-1/2 lg:w-1/3">
+                            <h2 className="ml-4 mt-4 text-2xl leading-6 font-medium text-black overflow-auto">{selectedBook.title}</h2>
                             <div className="overflow-auto h-16 w-104">
-                                <p className="mt-4 ml-4 text-lg text-gray-600 overflow-auto">{selectedBook.author_name.join(', ')}</p>
+                                <p className="mt-4 ml-4 text-xl text-black overflow-auto">{selectedBook.author_name.join(', ')}</p>
                             </div>
-
-                            <p className="mt-4 ml-4 text-lg text-gray-600 overflow-auto">{selectedBook.first_publish_year}</p>
+                            <div className="overflow-auto ">
+                                <p className="mt-4 ml-4 mb-2 text-lg text-gray-900 overflow-auto"><strong>People currently reading the Book:</strong> {selectedBook.want_to_read_count}</p>
+                                <p className=" ml-4 text-lg text-gray-900 overflow-auto"><strong>People have read the Book:</strong> {selectedBook.already_read_count}</p>
+                                <p className=" ml-4 text-lg text-gray-900 overflow-auto"><strong>People want to read the Book:</strong> {selectedBook.want_to_read_count} </p>
+                            </div>
+                            <div className="overflow-auto ">
+                                <p className="mt-4 ml-4 text-lg text-yellow-400 overflow-auto"><strong>Rating Average:</strong> {selectedBook.ratings_average}</p>
+                                <p className="ml-4 text-lg text-yellow-400 overflow-auto"><strong>Rating Count:</strong> {selectedBook.ratings_count}</p>
+                            </div>
+                            <p className="mt-4 ml-4 text-lg text-gray-900 overflow-auto"><strong>Publishing year:</strong> {selectedBook.first_publish_year}</p>
                             <div className=" overflow-auto h-64 w-104">
-                                <p className="mt-4 ml-4 text-lg text-gray-600">Book Summary: {selectedBook.first_sentence}</p>
+                                <p className="mt-4 ml-4 text-lg text-gray-900"><strong>Book Summary:</strong> {selectedBook.first_sentence}</p>
                             </div>
-                            <p className="mt-4 ml-4  text-sm text-gray-600 overflow-auto">Number of Pages: {selectedBook.number_of_pages_median}</p>
+                            <div className="overflow-auto h-28 w-104 mt-4">
+                                <p className="mt-4 ml-4 text-lg text-gray-900 overflow-auto"><strong>Persons:</strong> {Array.isArray(selectedBook.person) ? selectedBook.person.join(', ') : selectedBook.person}</p>
+                            </div>
+                            <p className="mt-4 ml-4  text-sm text-gray-900 overflow-auto"><strong>Number of Pages:</strong> {selectedBook.number_of_pages_median}</p>
                             <form onSubmit={handleCloseModal}>
                                 <label className="mt-4 ml-4  text-sm text-gray-600" htmlFor="pagesRead">Pages Read:</label>
                                 <input id="pagesRead" type="number" value={pagesRead} onChange={(e) => setPagesRead(parseInt(e.target.value, 10))} />
@@ -164,6 +188,13 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
                     </div>
                 )
             )}
+            {showAuthorInfoModal && authorInfo && (
+                <AuthorInfoModal authorInfo={authorInfo} onClose={() => setShowAuthorInfoModal(false)} author={{
+                    url: undefined,
+                    name: undefined
+                }} />
+            )}
+
 
         </>
     );

@@ -12,7 +12,6 @@ const FavoriteAuthors = () => {
     const [loading, setLoading] = useState(true);
     const [showAll, setShowAll] = useState(false);
 
-
     useEffect(() => {
         if (favoriteAuthors.length > 0) {
             setLoading(false);
@@ -26,9 +25,11 @@ const FavoriteAuthors = () => {
         const data = await response.json();
         setBooks(data.docs);
     };
+
     const handleShowAllClick = () => {
         setShowAll(true);;
     };
+
     const handleShowLessClick = () => {
         setShowAll(false);
     };
@@ -36,8 +37,8 @@ const FavoriteAuthors = () => {
     const handleRemoveFavoriteAuthor = (author: Author) => {
         dispatch(removeFavoriteAuthor(author.id));
     };
-    const displayedAuthors = showAll ? favoriteAuthors : favoriteAuthors.slice(0, 2);
 
+    const displayedAuthors = showAll ? favoriteAuthors : favoriteAuthors.slice(0, 2);
 
     if (loading) {
         return <div>Loading...</div>;
