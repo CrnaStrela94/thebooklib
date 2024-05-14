@@ -27,3 +27,6 @@ a {
     text-wrap: balance;
   }
 }
+.neon-text {
+  @apply text-white text-6xl animate-neon;
+}

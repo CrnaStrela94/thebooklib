@@ -1,12 +1,13 @@
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
 
-interface ButtonProps {
+type ButtonProps = {
     text: string;
+    type: "button" | "reset" | "submit";
     onClick: () => void;
-}
+};
 
-export default function Buttons({ text, onClick }: ButtonProps) {
+export default function Buttons({ text, type, onClick }: ButtonProps) {
     const [isClicked, setIsClicked] = useState(false)
 
     const handleClick = () => {
@@ -16,12 +17,12 @@ export default function Buttons({ text, onClick }: ButtonProps) {
 
     return (
         <button
-            type="button"
+            type={type}
             onClick={handleClick}
-            className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 z-10"
+            className="inline-flex items-center gap-x-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
         >
+            {isClicked ? <CheckCircleIcon className="h-5 w-5 text-white" /> : null}
             {text}
-            <CheckCircleIcon className={`-mr-0.5 h-5 w-5 ${isClicked ? 'text-red-500' : 'text-white'}`} aria-hidden="true" />
         </button>
     )
 }
