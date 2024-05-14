@@ -10,6 +10,9 @@ const Home = ({ Component, pageProps, router }: AppProps) => (
         <Layout>
             <div className="flex flex-col items-center  min-h-screen py-2">
                 <HamburgerMenu />
+                <div>
+                    <h1 className="neon-text ">Welcome to the BookLib made by Luka.A</h1>
+                </div>
                 <LibrarySearch />
 
             </div>

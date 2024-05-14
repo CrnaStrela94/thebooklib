@@ -9,7 +9,7 @@ export default function FavAuthor() {
     return (
         <Provider store={store}>
             <Layout>
-                <div className="flex flex-col items-center justify-center min-h-screen py-2">
+                <div className="flex flex-col items-center min-h-screen py-2">
                     <HamburgerMenu />
                     <FavoriteAuthors />
                 </div>

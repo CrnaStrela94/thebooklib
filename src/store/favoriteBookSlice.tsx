@@ -3,6 +3,8 @@ import { RootState } from './store';
 import { ReactNode } from 'react';
 
 export interface Book {
+    first_sentence: ReactNode;
+    number_of_pages_median: ReactNode;
     author_name: any;
     first_publish_year: ReactNode;
     key: string;

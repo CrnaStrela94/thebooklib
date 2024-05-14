@@ -13,8 +13,6 @@ const FavoriteBooks: React.FC = () => {
         }
     }, [favoriteBooks]);
 
-
-
     if (loading) {
         return <div>Loading...</div>;
     }

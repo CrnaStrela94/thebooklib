@@ -30,8 +30,6 @@ const LibrarySearch = () => {
         setNumBooksToLoad(numBooksToLoad + 10);
     };
 
-
-
     return (
         <div>
             <SearchForm />
