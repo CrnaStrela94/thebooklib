@@ -25,6 +25,8 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
     const [ratings, setRatings] = useState<Record<string, number>>({});
     const [showAuthorInfoModal, setShowAuthorInfoModal] = useState(false);
     const [authorInfo, setAuthorInfo] = useState<any>(null);
+    const [review, setReview] = useState<string>('');
+
 
     useEffect(() => {
         const newRatings: Record<string, number> = {};
@@ -54,12 +56,15 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
             handleRemoveFavorite(book);
         }
     }
+
     const handleOpenModal = (book: Book) => {
         setSelectedBook(book);
         const pages = localStorage.getItem(`pagesRead-${book.key}`);
         setPagesRead(pages ? parseInt(pages, 10) : 0);
         const bookRating = localStorage.getItem(`bookRating-${book.key}`);
         const rating = bookRating ? Number(bookRating) : 0;
+        const bookReview = localStorage.getItem(`bookReview-${book.key}`);
+        setReview(bookReview || '');
         setRatings(prevRatings => {
             const newRatings = { ...prevRatings, [book.key]: rating };
             localStorage.setItem('ratings', JSON.stringify(newRatings));
@@ -73,6 +78,8 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
     function handleCloseModal(): void {
         if (selectedBook) {
             localStorage.setItem(`pagesRead-${(selectedBook as Book).key}`, pagesRead.toString());
+            localStorage.setItem(`bookReview-${(selectedBook as Book).key}`, review);
+
         }
         setSelectedBook(null);
     }
@@ -151,7 +158,7 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
                         <div className="bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all xs:w-full sm:w-3/4 md:w-1/2 lg:w-1/3">
                             <h2 className="ml-4 mt-4 text-2xl leading-6 font-medium text-black overflow-auto">{selectedBook.title}</h2>
                             <div className="overflow-auto h-16 w-104">
-                                <p className="mt-4 ml-4 text-xl text-black overflow-auto">{selectedBook.author_name.join(', ')}</p>
+                                <p className="mt-4 ml-4 text-xl text-black overflow-auto"><strong>Author:</strong> {selectedBook.author_name.join(', ')}</p>
                             </div>
                             <div className="overflow-auto ">
                                 <p className="mt-4 ml-4 mb-2 text-lg text-gray-900 overflow-auto"><strong>People currently reading the Book:</strong> {selectedBook.want_to_read_count}</p>
@@ -163,16 +170,33 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
                                 <p className="ml-4 text-lg text-yellow-400 overflow-auto"><strong>Rating Count:</strong> {selectedBook.ratings_count}</p>
                             </div>
                             <p className="mt-4 ml-4 text-lg text-gray-900 overflow-auto"><strong>Publishing year:</strong> {selectedBook.first_publish_year}</p>
-                            <div className=" overflow-auto h-64 w-104">
-                                <p className="mt-4 ml-4 text-lg text-gray-900"><strong>Book Summary:</strong> {selectedBook.first_sentence}</p>
+                            <div className={`overflow-auto w-104 ${selectedBook.first_sentence ? 'h-64' : 'h-10'}`}>
+                                <p className="mt-4 ml-4 text-lg text-gray-900">
+                                    <strong>Book Summary:</strong> {selectedBook.first_sentence}
+                                </p>
                             </div>
-                            <div className="overflow-auto h-28 w-104 mt-4">
-                                <p className="mt-4 ml-4 text-lg text-gray-900 overflow-auto"><strong>Persons:</strong> {Array.isArray(selectedBook.person) ? selectedBook.person.join(', ') : selectedBook.person}</p>
+                            <div className={`overflow-auto w-104 mt-4 ${Array.isArray(selectedBook.person) && selectedBook.person.length > 0 ? 'h-28' : 'h-32'}`}>
+                                <p className="mt-4 ml-4 text-lg text-gray-900 overflow-auto">
+                                    <strong>Persons:</strong> {Array.isArray(selectedBook.person) ? selectedBook.person.join(', ') : selectedBook.person}
+                                </p>
                             </div>
                             <p className="mt-4 ml-4  text-sm text-gray-900 overflow-auto"><strong>Number of Pages:</strong> {selectedBook.number_of_pages_median}</p>
                             <form onSubmit={handleCloseModal}>
                                 <label className="mt-4 ml-4  text-sm text-gray-600" htmlFor="pagesRead">Pages Read:</label>
                                 <input id="pagesRead" type="number" value={pagesRead} onChange={(e) => setPagesRead(parseInt(e.target.value, 10))} />
+                                <label
+                                    className="mt-4 ml-4 text-sm text-gray-600 border "
+                                    htmlFor="review"
+                                >
+                                    Review:
+                                </label>
+                                <textarea
+                                    id="review"
+                                    value={review}
+                                    onChange={(e) => setReview(e.target.value)}
+                                    className="border overflow-auto h-28 "
+                                />
+
                                 <div className="flex justify-end items-end mt-auto">
                                     <Buttons
                                         text={'Save'}

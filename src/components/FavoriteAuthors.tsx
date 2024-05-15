@@ -46,8 +46,8 @@ const FavoriteAuthors = () => {
 
     return (
         <div className="flex flex-col items-center">
-            <div className="p-8 bg-white rounded shadow mb-8 grid grid-cols-4 gap-4">
-                <h1 className="text-2xl font-bold mb-4">My Favorite Authors</h1>
+            <h1 className="text-2xl font-bold mb-4 neon-text ">My Favorite Authors</h1>
+            <div className="p-8 bg-white rounded shadow mb-8 grid grid-cols-2 gap-4">
                 <ul className="space-y-4">
                     {displayedAuthors.map(author => (
                         <li key={author.id} className="flex items-center justify-between space-x-4">

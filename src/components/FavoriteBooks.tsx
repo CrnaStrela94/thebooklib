@@ -19,7 +19,7 @@ const FavoriteBooks: React.FC = () => {
 
     return (
         <div className="flex mt-2 ml-8  flex-col items-center">
-            <h1 className="flex mt-2 ml-8 text-2xl font-bold mb-4">My Favorite Books</h1>
+            <h1 className="flex mt-2 ml-8 text-2xl font-bold mb-4 neon-text ">My Favorite Books</h1>
             <BookList books={favoriteBooks} />
         </div>
     );
