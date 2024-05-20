@@ -18,23 +18,24 @@ Before you begin, ensure you have met the following requirements:
 Execute the following steps to get started with the project:
 
 1. Clone the repository:
-   git clone https://github.com/CrnaStrela94/thebooklib.git
+   git clone `https://github.com/CrnaStrela94/thebooklib.git`
 
 2. Navigate to the project directory:
-   cd thebooklib
+   `cd thebooklib`
 
 3. Install the dependencies:
 
-Using npm: npm install
+Using npm: `npm install`
 
-Or using yarn: yarn install
+Or using yarn: `yarn install`
+
 
 ### Running the Application
 
 Start the development server:
 
-Using npm: npm run dev
-Using yarn:yarn dev
+Using npm: `npm run dev`
+Using yarn:`yarn dev`
 
 ### Viewing the Application
 
