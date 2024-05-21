@@ -161,7 +161,7 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
                                 <p className="mt-4 ml-4 text-xl text-black overflow-auto"><strong>Author:</strong> {selectedBook.author_name.join(', ')}</p>
                             </div>
                             <div className="overflow-auto ">
-                                <p className="mt-4 ml-4 mb-2 text-lg text-gray-900 overflow-auto"><strong>People currently reading the Book:</strong> {selectedBook.want_to_read_count}</p>
+                                <p className="mt-4 ml-4 mb-2 text-lg text-gray-900 overflow-auto"><strong>People currently reading the Book:</strong> {selectedBook.currently_reading_count}</p>
                                 <p className=" ml-4 text-lg text-gray-900 overflow-auto"><strong>People have read the Book:</strong> {selectedBook.already_read_count}</p>
                                 <p className=" ml-4 text-lg text-gray-900 overflow-auto"><strong>People want to read the Book:</strong> {selectedBook.want_to_read_count} </p>
                             </div>
@@ -198,12 +198,7 @@ export const BookList: React.FC<BookListProps> = ({ books }) => {
                                 />
 
                                 <div className="flex justify-end items-end mt-auto">
-                                    <Buttons
-                                        text={'Save'}
-                                        type="submit"
-                                        onClick={() => {
-                                            setPagesRead(pagesRead);
-                                        }}
+                                    <Buttons text={'Save'} type="submit" onClick={() => { setPagesRead(pagesRead); }}
                                     />
                                     <Buttons text={'Close'} onClick={handleCloseModal} type={'button'} />
                                 </div>

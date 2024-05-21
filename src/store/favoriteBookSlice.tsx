@@ -3,7 +3,7 @@ import { RootState } from './store';
 import { ReactNode } from 'react';
 
 export interface Book {
-
+    currently_reading_count: ReactNode;
     genres: ReactNode;
     person: ReactNode;
     ratings_count: ReactNode;
